@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# OS / editors
+.DS_Store
+.vscode/
+.idea/
+
+# Data and results
+data/
+
+# files
+*.bam
+*.bai
+*.sam
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+*.fa
+*.fa.gz
+*.fasta
+*.fasta.gz
+*.2bit
+*.bw
+*.bigWig
+*.bedGraph
+*.gtf
+*.gff
+*.gff3
+*.hic
+*.cool
+
+# Results
+results/
