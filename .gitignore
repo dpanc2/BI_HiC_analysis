@@ -10,10 +10,6 @@ venv/
 .vscode/
 .idea/
 
-# Data and results
-data/
-!data/gc_track_*.tsv
-
 # files
 *.bam
 *.bai
@@ -35,6 +31,8 @@ data/
 *.gff3
 *.hic
 *.cool
+*.mcool
+*.fna*
 
 # Results
 results/
