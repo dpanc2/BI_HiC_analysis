@@ -12,6 +12,7 @@ venv/
 
 # Data and results
 data/
+!data/gc_track_*.tsv
 
 # files
 *.bam
