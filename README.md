@@ -4,10 +4,9 @@
 
 ```text
 BI_HiC_analysis/
-├── notebooks/          # Jupyter notebooks для мастер-класса
-├── scripts/            # Скрипты для загрузки и подготовки данных
+├── notebooks/          # Jupyter notebooks
+├── scripts/            # Скрипт для загрузки и подготовки данных
 ├── data/               # Данные, создаётся после запуска download_data.py
-├── results/            # Результаты анализа, создаётся блокнотами
 ├── requirements.txt    # Python-зависимости
 └── README.md
 ```
