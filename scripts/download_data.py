@@ -1,6 +1,8 @@
 import os
 import requests
+import subprocess
 from tqdm import tqdm
+import cooler
 from hic2cool.hic2cool_utils import hic2cool_convert
 
 # URLs for Hi-C maps
@@ -42,15 +44,60 @@ def download_file(url, dest_folder):
             
     return filepath
 
+def balance_mcool(mcool_path, nproc=16):
+    """
+    Balance all resolutions inside an .mcool file.
+    Balancing writes weights into bins/weight for each resolution.
+    """
+
+    print(f"Balancing {mcool_path}...")
+
+    # Example result:
+    # /resolutions/5000
+    # /resolutions/10000
+    # /resolutions/25000
+    resolutions = cooler.fileops.list_coolers(mcool_path)
+
+    for resolution_group in resolutions:
+        uri = f"{mcool_path}::{resolution_group}"
+
+        print(f"  Balancing {uri}")
+
+        cmd = [
+            "cooler",
+            "balance",
+            "--ignore-diags", "2",
+            "--mad-max", "5",
+            "--min-nnz", "10",
+            "--nproc", str(nproc),
+            uri
+        ]
+
+        subprocess.run(cmd, check=True)
+
 if __name__ == "__main__":
     print("Starting data download...")
     for url in URLS:
         hic_path = download_file(url, DATA_DIR)
-        
+
         cool_path = hic_path.replace(".hic", ".mcool")
+
         if not os.path.exists(cool_path):
             print(f"Converting {hic_path} to {cool_path}...")
-            # You could change resolution to 2500000, 1000000, 500000, 250000, 100000, 50000, 25000, 10000, 5000
-            hic2cool_convert(hic_path, cool_path, resolution=10000)
+
+            # resolution=0 creates a multi-resolution .mcool
+            hic2cool_convert(
+                hic_path,
+                cool_path,
+                resolution=0,
+                nproc=16
+            )
+
+            balance_mcool(cool_path, nproc=16)
+
+        else:
+            print(f"{cool_path} already exists. Skipping conversion.")
+            balance_mcool(cool_path, nproc=16)
+            
             
     print("All files downloaded and converted successfully!")
